@@ -5,10 +5,12 @@ import (
 	"runtime"
 )
 
-func Recover() {
-	if p := recover(); p != nil {
-		fmt.Println(p)
+func Recover() interface{} {
+	if e := recover(); e != nil {
+		fmt.Println(e)
 		var buf [4096]byte
 		fmt.Printf(string(buf[:runtime.Stack(buf[:], false)]))
+		return e
 	}
+	return nil
 }
