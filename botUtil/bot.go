@@ -70,11 +70,13 @@ func (bot) GetMap(c context.Context) map[string]interface{} {
 }
 
 func (s bot) doString(c context.Context, index string) string {
-	return s.GetMap(c)[index].(string)
+	v, _ := s.GetMap(c)[index].(string)
+	return v
 }
 
 func (s bot) doInt(c context.Context, index string) int {
-	return int(s.GetMap(c)[index].(float64))
+	v, _ := s.GetMap(c)[index].(float64)
+	return int(v)
 }
 
 func (s bot) GetGroupId(c context.Context) int {
