@@ -3,7 +3,7 @@ module github.com/MultiMx/CqHttpClient
 go 1.18
 
 require (
-	github.com/Mmx233/tool v0.6.0
+	github.com/Mmx233/tool v0.6.1
 	github.com/gorilla/websocket v1.5.0
 )
 

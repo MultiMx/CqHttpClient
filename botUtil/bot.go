@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/Mmx233/tool"
+	botTransfer "github.com/MultiMx/CqHttpClient/transfer"
+	"github.com/PuerkitoBio/goquery"
 	"html"
 	"strings"
 	"unicode/utf8"
@@ -150,33 +152,50 @@ func (s bot) WriteMsg(c context.Context, a string) {
 	s.GetMap(c)["message"] = a
 }
 
-func (s bot) GenShareByUrl(url string) []string {
-	t, e := tool.HTTP.GetGoquery(&tool.GetRequest{
+func (s bot) GenShareByUrl(url string) (*botTransfer.Share, error) {
+	res, e := tool.HTTP.GetReader(&tool.GetRequest{
 		Url:      url,
 		Redirect: true,
 	})
-	if e != nil || t == nil {
-		return nil
+	if e != nil {
+		return nil, e
+	}
+	defer res.Body.Close()
+	t, e := goquery.NewDocumentFromReader(res.Body)
+	if e != nil {
+		return nil, e
 	}
 	Title := strings.Split(strings.TrimSpace(t.Find("title").Text()), " ")
 	if len(Title) == 1 {
 		Title = append(Title, "分享")
 	}
-	return []string{Title[len(Title)-1], Title[0], url, t.Find("meta[property*=image]").AttrOr("content", ""), t.Find("meta[name=description]").AttrOr("content", " ")}
+	return &botTransfer.Share{
+			Source:   Title[len(Title)-1],
+			Title:    Title[0],
+			Url:      url,
+			ImageUrl: t.Find("meta[property*=image]").AttrOr("content", ""),
+			Desc:     t.Find("meta[name=description]").AttrOr("content", " "),
+		},
+		e
 }
 
-func (s bot) GenShareString(overview string, title string, link string, picLink string, content string) string {
-	if utf8.RuneCountInString(title) > 20 {
-		title = string([]rune(title)[:18]) + "…"
+func (s bot) GenShareString(c *botTransfer.Share) string {
+	var title, content string
+	if utf8.RuneCountInString(c.Title) > 20 {
+		title = string([]rune(c.Title)[:19]) + "…"
+	} else {
+		title = c.Title
 	}
-	if utf8.RuneCountInString(content) > 75 {
-		content = string([]rune(content)[:73]) + "…"
+	if utf8.RuneCountInString(c.Desc) > 50 {
+		content = string([]rune(c.Desc)[:49]) + "…"
+	} else {
+		content = c.Desc
 	}
 	return Cq.Make("xml", map[string]string{
-		"data": `<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><msg serviceID="146" templateID="1" action="web" brief="&#91;` + html.EscapeString(overview) +
+		"data": `<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><msg serviceID="146" templateID="1" action="web" brief="&#91;` + html.EscapeString(c.Source) +
 			`&#93; ` + Cq.DataConvert(title) +
-			`" sourceMsgId="0" url="` + Cq.DataConvert(link) +
-			`" flag="0" adverSign="0" multiMsgFlag="0"><item layout="2" advertiser_id="0" aid="0"><picture cover="` + html.EscapeString(picLink) +
+			`" sourceMsgId="0" url="` + Cq.DataConvert(c.Url) +
+			`" flag="0" adverSign="0" multiMsgFlag="0"><item layout="2" advertiser_id="0" aid="0"><picture cover="` + html.EscapeString(c.ImageUrl) +
 			`" w="0" h="0" /><title>` + Cq.DataConvert(title) +
 			`</title><summary>` + Cq.DataConvert(content) +
 			`</summary></item><source name="来自Mmx的姬器人" icon="https://z3.ax1x.com/2021/04/29/gksnxJ.png" url="" action="app" a_actionData="" i_actionData="" appid="-1" /></msg>`,
