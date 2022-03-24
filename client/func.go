@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/Mmx233/tool"
 	"github.com/MultiMx/CqHttpClient/botUtil"
+	botTransfer "github.com/MultiMx/CqHttpClient/transfer"
 	"html"
 	"time"
 )
@@ -113,11 +114,11 @@ func KickMember(GroupId int, UserId int, reject bool) error {
 	return e
 }
 
-func ShareGroup(GroupId int, overview, title, link, picLink, content string, NeedId bool) (int, error) {
-	return SendGroupMsg(GroupId, botUtil.Bot.GenShareString(overview, title, link, picLink, content), 0, NeedId)
+func ShareGroup(GroupId int, share *botTransfer.Share, NeedId bool) (int, error) {
+	return SendGroupMsg(GroupId, botUtil.Bot.GenShareString(share), 0, NeedId)
 }
-func Share(c context.Context, overview, title, link, picLink, content string, NeedId bool) (int, error) {
-	return Auto(c, botUtil.Bot.GenShareString(overview, title, link, picLink, content), NeedId)
+func Share(c context.Context, share *botTransfer.Share, NeedId bool) (int, error) {
+	return Auto(c, botUtil.Bot.GenShareString(share), NeedId)
 }
 
 func TecentTts(c context.Context, word string, needId bool) (int, error) {
