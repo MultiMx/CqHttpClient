@@ -153,9 +153,8 @@ func (s bot) WriteMsg(c context.Context, a string) {
 }
 
 func (s bot) GenShareByUrl(url string) (*botTransfer.Share, error) {
-	res, e := tool.HTTP.GetReader(&tool.GetRequest{
-		Url:      url,
-		Redirect: true,
+	res, e := tool.HTTP.GetRes(&tool.GetRequest{
+		Url: url,
 	})
 	if e != nil {
 		return nil, e

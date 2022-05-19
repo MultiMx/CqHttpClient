@@ -135,7 +135,6 @@ func YoudaoTts(c context.Context, word string, needId bool) (int, error) {
 			"keyfrom": "speaker-target",
 			"word":    word,
 		},
-		Redirect: true,
 	})
 	if e != nil {
 		return 0, e

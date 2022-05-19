@@ -47,9 +47,8 @@ func do(ws bool, action string, query map[string]interface{}) (map[string]interf
 	}
 	query["access_token"] = c.AccessKey
 	_, d, e := tool.HTTP.Get(&tool.GetRequest{
-		Url:      c.HttpBackend + action,
-		Query:    query,
-		Redirect: true,
+		Url:   c.HttpBackend + action,
+		Query: query,
 	})
 	return d, e
 }
