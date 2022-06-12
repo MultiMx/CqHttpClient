@@ -115,10 +115,10 @@ func KickMember(GroupId int, UserId int, reject bool) error {
 }
 
 func ShareGroup(GroupId int, share *botTransfer.Share, NeedId bool) (int, error) {
-	return SendGroupMsg(GroupId, botUtil.Bot.GenShareString(share), 0, NeedId)
+	return SendGroupMsg(GroupId, botUtil.Bot.GenShareCqCode(share), 0, NeedId)
 }
 func Share(c context.Context, share *botTransfer.Share, NeedId bool) (int, error) {
-	return Auto(c, botUtil.Bot.GenShareString(share), NeedId)
+	return Auto(c, botUtil.Bot.GenShareCqCode(share), NeedId)
 }
 
 func TecentTts(c context.Context, word string, needId bool) (int, error) {

@@ -6,7 +6,6 @@ import (
 	"github.com/Mmx233/tool"
 	botTransfer "github.com/MultiMx/CqHttpClient/transfer"
 	"github.com/PuerkitoBio/goquery"
-	"html"
 	"strings"
 	"unicode/utf8"
 )
@@ -178,7 +177,7 @@ func (s bot) GenShareByUrl(url string) (*botTransfer.Share, error) {
 		e
 }
 
-func (s bot) GenShareString(c *botTransfer.Share) string {
+func (s bot) GenShareCqCode(c *botTransfer.Share) string {
 	var title, content string
 	if utf8.RuneCountInString(c.Title) > 20 {
 		title = string([]rune(c.Title)[:19]) + "…"
@@ -190,15 +189,11 @@ func (s bot) GenShareString(c *botTransfer.Share) string {
 	} else {
 		content = c.Desc
 	}
-	return Cq.Make("xml", map[string]string{
-		"data": `<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><msg serviceID="146" templateID="1" action="web" brief="&#91;` + html.EscapeString(c.Source) +
-			`&#93; ` + Cq.DataConvert(title) +
-			`" sourceMsgId="0" url="` + Cq.DataConvert(c.Url) +
-			`" flag="0" adverSign="0" multiMsgFlag="0"><item layout="2" advertiser_id="0" aid="0"><picture cover="` + html.EscapeString(c.ImageUrl) +
-			`" w="0" h="0" /><title>` + Cq.DataConvert(title) +
-			`</title><summary>` + Cq.DataConvert(content) +
-			`</summary></item><source name="来自Mmx的姬器人" icon="https://z3.ax1x.com/2021/04/29/gksnxJ.png" url="" action="app" a_actionData="" i_actionData="" appid="-1" /></msg>`,
-		"resid": "146",
+	return Cq.Make("share", map[string]string{
+		"url":     c.Url,
+		"title":   title,
+		"content": content,
+		"image":   c.ImageUrl,
 	})
 }
 
