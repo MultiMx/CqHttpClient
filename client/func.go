@@ -128,7 +128,7 @@ func TecentTts(c context.Context, word string, needId bool) (int, error) {
 }
 
 func YoudaoTts(c context.Context, word string, needId bool) (int, error) {
-	_, n, e := tool.HTTP.GetBytes(&tool.GetRequest{
+	_, n, e := Http.GetBytes(&tool.DoHttpReq{
 		Url: "https://tts.youdao.com/fanyivoice",
 		Query: map[string]interface{}{
 			"le":      "auto",

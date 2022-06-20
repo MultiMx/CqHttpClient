@@ -1,8 +1,11 @@
 package client
 
 import (
+	"github.com/Mmx233/tool"
 	"github.com/gorilla/websocket"
+	"net/http"
 	"sync"
+	"time"
 )
 
 type socket struct {
@@ -11,6 +14,7 @@ type socket struct {
 }
 
 type Config struct {
+	HttpClient  *http.Client
 	ws          *socket
 	AccessKey   string
 	HttpBackend string
@@ -20,5 +24,14 @@ type Config struct {
 var c *Config
 
 func Configure(a *Config) {
+	if a.HttpClient == nil {
+		a.HttpClient = tool.GenHttpClient(&tool.HttpClientOptions{
+			Transport: tool.GenHttpTransport(&tool.HttpTransportOptions{
+				Timeout: time.Second * 30,
+			}),
+			Timeout: time.Second * 30,
+		})
+	}
+	Http = tool.NewHttpTool(a.HttpClient)
 	c = a
 }
