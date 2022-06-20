@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/Mmx233/tool"
-	"github.com/MultiMx/CqHttpClient/client"
 	botTransfer "github.com/MultiMx/CqHttpClient/transfer"
+	"github.com/MultiMx/CqHttpClient/util"
 	"github.com/PuerkitoBio/goquery"
 	"strings"
 	"unicode/utf8"
@@ -153,7 +153,7 @@ func (s bot) WriteMsg(c context.Context, a string) {
 }
 
 func (s bot) GenShareByUrl(url string) (*botTransfer.Share, error) {
-	res, e := client.Http.GetRequest(&tool.DoHttpReq{
+	res, e := util.Http.GetRequest(&tool.DoHttpReq{
 		Url: url,
 	})
 	if e != nil {

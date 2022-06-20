@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/Mmx233/tool"
 	"github.com/MultiMx/CqHttpClient/botUtil"
+	"github.com/MultiMx/CqHttpClient/util"
 	"github.com/gorilla/websocket"
 	"log"
 	"sync"
@@ -46,7 +47,7 @@ func do(ws bool, action string, query map[string]interface{}) (map[string]interf
 		query = make(map[string]interface{})
 	}
 	query["access_token"] = c.AccessKey
-	_, d, e := Http.Get(&tool.DoHttpReq{
+	_, d, e := util.Http.Get(&tool.DoHttpReq{
 		Url:   c.HttpBackend + action,
 		Query: query,
 	})

@@ -2,6 +2,7 @@ package client
 
 import (
 	"github.com/Mmx233/tool"
+	"github.com/MultiMx/CqHttpClient/util"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"sync"
@@ -32,6 +33,6 @@ func Configure(a *Config) {
 			Timeout: time.Second * 30,
 		})
 	}
-	Http = tool.NewHttpTool(a.HttpClient)
+	util.Http = tool.NewHttpTool(a.HttpClient)
 	c = a
 }

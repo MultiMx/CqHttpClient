@@ -8,6 +8,7 @@ import (
 	"github.com/Mmx233/tool"
 	"github.com/MultiMx/CqHttpClient/botUtil"
 	botTransfer "github.com/MultiMx/CqHttpClient/transfer"
+	"github.com/MultiMx/CqHttpClient/util"
 	"html"
 	"time"
 )
@@ -128,7 +129,7 @@ func TecentTts(c context.Context, word string, needId bool) (int, error) {
 }
 
 func YoudaoTts(c context.Context, word string, needId bool) (int, error) {
-	_, n, e := Http.GetBytes(&tool.DoHttpReq{
+	_, n, e := util.Http.GetBytes(&tool.DoHttpReq{
 		Url: "https://tts.youdao.com/fanyivoice",
 		Query: map[string]interface{}{
 			"le":      "auto",
